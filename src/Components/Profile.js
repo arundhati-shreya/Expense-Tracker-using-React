@@ -1,34 +1,41 @@
-import React,{useState} from "react";
+import React,{useRef} from "react";
 
 const Profile=()=>{
-    const [fullName, setFullName] = useState("");
-    const [profilePhotoURL, setProfilePhotoURL] = useState("");
-
-    const UpdateHandler=async(e)=>{
-        e.preventDefault();
-        const requestData = {
-            fullName: fullName,
-            profilePhotoURL: profilePhotoURL,
-            
+    const fullnameInputRef = useRef();
+    const photourlInputRef = useRef();
+  
+    const submitHandler = async (e) => {
+      e.preventDefault();
+      try {
+        const enteredFullName = fullnameInputRef.current.value;
+        const enteredPhotoURL = photourlInputRef.current.value;
+        const idToken = localStorage.getItem("token");
+        const obj = {
+          idToken: idToken,
+          displayName: enteredFullName,
+          photoUrl: enteredPhotoURL,
+          deleteAttribute: [],
+          returnSecureToken: false,
         };
-
-        try {
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestData),
-            });
-
-            const data = await response.json();
-
-            // Handle the response data as needed
-            console.log(data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+  
+        const response = await fetch(
+          "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0",
+          {
+            body: JSON.stringify(obj),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log("data=", data);
+        alert("successfully updated the user details");
+      } catch (err) {
+        console.log(err);
+      }
     };
+        
     return(
         <>
         <div className="container-fluid px-0">
@@ -46,16 +53,16 @@ const Profile=()=>{
         </div>
         <div className="container">
                 <h3>Contact Details</h3>
-                <form>
+                <form onSubmit={submitHandler}>
                     <div className="mb-3">
                         <label htmlFor="fullName" className="-col-sm-2 col-form-label">Full Name:</label>
-                        <input type="text" className="form-control" id="fullName" value={fullName} onChange={(e) => setFullName(e.target.value)}/>
+                        <input type="text" className="form-control" id="fullName" ref={fullnameInputRef}/>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="profilePhotoURL" className="form-label">Profile Photo URL:</label>
-                        <input type="text" className="form-control" id="profilePhotoURL" value={profilePhotoURL} onChange={(e) => setProfilePhotoURL(e.target.value)} />
+                        <input type="text" className="form-control" id="profilePhotoURL" ref={photourlInputRef} />
                     </div>
-                    <button type="submit" className="btn btn-primary" onClick={UpdateHandler}>Update</button>
+                    <button type="submit" className="btn btn-primary" >Update</button>
                 </form>
                 <hr />
             </div>

@@ -135,6 +135,7 @@ const Signup = () => {
             <button type="submit" className="btn btn-primary w-100">
               {!isLogin ? 'Signup' : 'Login'}
             </button>
+            {isLogin && <Link to="/forgot-password">Forgot Passord?</Link>}
           </form>
           <button type="button" onClick={switchAuthModeHandler}>
             {isLogin ? 'Create new account' : 'Login with existing account'}

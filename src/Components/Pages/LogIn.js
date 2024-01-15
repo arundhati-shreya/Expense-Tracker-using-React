@@ -24,7 +24,7 @@ const LogIn = () => {
         setLoading(true);
         try {
             const idToken = localStorage.getItem("token");
-            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0',
+            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDtpLp4tbp-1WlAy5DyLwzMBWXKLvkTTDA',
                 {
                     method: 'POST',
                     headers: {

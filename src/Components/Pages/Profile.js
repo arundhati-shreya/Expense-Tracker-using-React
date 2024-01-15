@@ -9,7 +9,7 @@ const Profile = () => {
             const idToken = localStorage.getItem("token");
             try {
               const response = await fetch(
-                `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0`,
+                `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDtpLp4tbp-1WlAy5DyLwzMBWXKLvkTTDA`,
                 {
                   method: "POST",
                   headers: {

@@ -16,8 +16,8 @@ const Signup = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token ) {
-      // navigate('/expense');
-      navigate('/login');
+      navigate('/expense');
+      // navigate('/login');
     }
   }, []);
 
@@ -41,8 +41,8 @@ const Signup = () => {
     }
 
     const url = isLogin
-      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0'
-      : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAPTNI_cnBDpM3UpcM5Z8KjHllp5W3snT0';
+      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtpLp4tbp-1WlAy5DyLwzMBWXKLvkTTDA'
+      : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtpLp4tbp-1WlAy5DyLwzMBWXKLvkTTDA';
 
     try {
       const response = await fetch(url, {
@@ -60,7 +60,9 @@ const Signup = () => {
       if (response.ok) {
         const userCredential = await response.json();
         const token = userCredential.idToken;
+        const email =userCredential.email;
         localStorage.setItem('token', token);
+        localStorage.setItem('email',email)
 
         console.log('User signed up:', userCredential);
 

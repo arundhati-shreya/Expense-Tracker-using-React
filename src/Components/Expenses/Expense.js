@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Expense = () => {
     const [amount, setAmount] = useState("");
@@ -8,23 +9,64 @@ const Expense = () => {
 
     const categories = ["Food", "Petrol", "Salary", "Other"];
 
-    const SubmitExpenseHandler = (e) => {
-        e.preventDefault();
-        const newExpense ={
-            Amount: amount,
-            Des: description,
-            Cat: category
-        };
+    useEffect(() => {
+        const emailId = localStorage.getItem("email");
+        const userid = emailId.replace(/[^a-zA-Z0-9\s]/g, "");
+    
+        async function fetchExpenses() {
+          try {
+            const response = await axios.get(
+              `https://expense-tracker-e0688-default-rtdb.firebaseio.com/expenses/${userid}.json`
+            );
+        
+            let data = response.data;
+            data = Object.values(data);
+            console.log("data=", data);
+            setExpenseData(data);
+          
+          } catch (err) {
+            console.log(err);
+          }
+        }
+    
+        fetchExpenses();
+      }, []);
 
-        setExpenseData([...expenseData, newExpense]);
-        setDescription('');
-        setAmount('');
-        setCategory('');
+    const SubmitExpenseHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const obj = {
+                id: Math.random().toString(),
+                amount,
+                description,
+                category,
+            };
+            const emailId = localStorage.getItem("email");
+            const userid = emailId.replace(/[^a-zA-Z0-9\s]/g, "");
+            const response = await fetch(`https://expense-tracker-e0688-default-rtdb.firebaseio.com/expenses/${userid}.json`,
+                {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(obj),
+                }
+            )
+            const data = await response.json(); ;
+            console.log(data);
+            setAmount("");
+            setDescription("");
+            setCategory("");
+        } catch(err) {
+            console.log(err);
+
+        }
+
     };
 
     return (
         <div className="container text-center mt-5">
-             <h1 className="display-4">Expense Data</h1>
+            <h1 className="display-4">Expense Data</h1>
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <form onSubmit={SubmitExpenseHandler}>
@@ -69,11 +111,11 @@ const Expense = () => {
                 </div>
             </div>
             <div className="mt-4">
-            <h2 className="text-muted font-italic">Expense List</h2>
+                <h2 className="text-muted font-italic">Expense List</h2>
 
                 {expenseData.map((item, index) => (
                     <div key={index} className="alert alert-info">
-                        {item.Des} - {item.Amount} - {item.Cat}
+                        <p> Amount:- {item.amount}  Description:- {item.description}  Category:- {item.category}</p>
                     </div>
                 ))}
             </div>

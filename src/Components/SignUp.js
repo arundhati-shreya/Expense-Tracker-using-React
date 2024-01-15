@@ -71,7 +71,7 @@ const Signup = () => {
         if (isLogin) {
           navigate('/login');
         } else {
-          // If it was a signup, set isLogin to true to trigger the redirect
+          
           setIsLogin(true);
         }
       } else {

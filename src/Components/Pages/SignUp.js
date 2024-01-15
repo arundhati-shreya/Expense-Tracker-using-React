@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const Signup = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token ) {
+      // navigate('/expense');
       navigate('/login');
     }
   }, []);
@@ -70,6 +72,7 @@ const Signup = () => {
        
         if (isLogin) {
           navigate('/login');
+          navigate('/expense')
         } else {
           
           setIsLogin(true);

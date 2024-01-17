@@ -79,7 +79,7 @@ const Profile = () => {
                     </div>
                     <div className="col-md-3 text-md-right">
                         <p className=" bg-info rounded" style={{ fontStyle: "italic", backgroundColor: '#778899' }}>
-                            Your profile is 64% completed. A complete profile has higher chances of landing a job.
+                            Your profile is <strong>64%</strong> completed. A complete profile has higher chances of landing a job.
                         </p>
                     </div>
                 </div>

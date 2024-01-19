@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import './Expense.css'
+
+import Papa from 'papaparse';
+import { saveAs } from 'file-saver';
+
+
 import { useDispatch, useSelector } from "react-redux";
 import { setExpenses } from "../../store/store";
-
+import { toggleTheme } from "../../store/store";
 
 const Expense = () => {
   const dispatch = useDispatch();
   const userid = useSelector((state) => state.auth.userId);
   const expenses = useSelector((state) => state.expenses.expenses);
+  const isDarkTheme = useSelector((state)=> state.theme.isDarkTheme)
+
 
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   // const [expenseData, setExpenseData] = useState([]);
   const [editingExpenseId, setEditingExpenseId] = useState(null);
+  const [activatePremium, setActivatePremium] = useState(false)
 
 
   const categories = ["Food", "Petrol", "Salary", "Other"];
@@ -43,7 +52,7 @@ const Expense = () => {
         data = Object.entries(data).map(([key, value]) => ({ ...value, _id: key }));
 
         dispatch(setExpenses(data));
-        console.log("data", data);
+        // console.log("data", data);
         // setExpenseData(data);
 
       } catch (err) {
@@ -165,11 +174,26 @@ const Expense = () => {
     }
   };
 
+  const PremiumHandler=()=>{
+    dispatch(toggleTheme());
+    setActivatePremium(!activatePremium);
+  }
 
+  const downloadCSV = () => {
+    // Convert expenses data to CSV format
+    const csvData = Papa.unparse(expenses);
+
+    // Create a Blob with the CSV data
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8' });
+
+    // Use file-saver to save the Blob as a CSV file
+    saveAs(blob, 'expenses.csv');
+  };
   const totalExpenses = calculateTotalExpenses();
-
+ 
 
   return (
+    <div className={`container text-center mt-5 ${isDarkTheme ? 'dark-theme' : 'light-theme'}`}>
     <div className="container text-center mt-5">
       <h1 className="display-4">Expense Data</h1>
       <div className="row justify-content-center">
@@ -233,12 +257,15 @@ const Expense = () => {
 
       <p className="alert alert-danger"><strong> Total Amount:-</strong> {totalExpenses}</p>
       {totalExpenses > 10000 && (
-        <button type="button" className="btn btn-primary">
+        <button type="button" className="btn btn-success" onClick={PremiumHandler}>
           Activate Premium
         </button>
       )}
+      <span> </span>
+      {activatePremium && <button className="btn btn-success" onClick={downloadCSV}>Download Expense</button>}
 
 
+    </div>
     </div>
   );
 };

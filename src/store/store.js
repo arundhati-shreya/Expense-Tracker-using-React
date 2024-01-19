@@ -45,10 +45,26 @@ const expensesSlice = createSlice({
 export const { addExpense, setExpenses } = expensesSlice.actions;
 export const expensesReducer = expensesSlice.reducer;
 
+const themeSlice = createSlice({
+  name:'theme',
+  initialState:{
+    isDarkTheme:false,
+  },
+  reducers: {
+    toggleTheme: (state)=>{
+      state.isDarkTheme = !state.isDarkTheme
+    }
+  }
+})
+
+export const {toggleTheme} = themeSlice.actions;
+export const themeReducer =(state,action) => themeSlice.reducer(state, action);
+
 const store = configureStore({
   reducer:{
     auth: authReducer,
     expenses: expensesReducer,
+    theme:themeReducer
   }
 });
 

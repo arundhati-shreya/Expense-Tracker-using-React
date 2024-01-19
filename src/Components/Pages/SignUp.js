@@ -73,7 +73,7 @@ const Signup = () => {
         // localStorage.setItem('token', token);
         // localStorage.setItem('email',email)
 
-        console.log('User signed up:', userCredential);
+        // console.log('User signed up:', userCredential);
 
         setFormData({
           email: '',

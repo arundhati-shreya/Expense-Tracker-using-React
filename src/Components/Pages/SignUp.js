@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Signup = () => {
+  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
+
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,10 +20,10 @@ const Signup = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token ) {
-      navigate('/expense');
-      // navigate('/login');
+    // const token = localStorage.getItem('token');
+    if (isLoggedIn) {
+      // navigate('/expense');
+      navigate('/login');
     }
   }, []);
 
@@ -61,8 +67,11 @@ const Signup = () => {
         const userCredential = await response.json();
         const token = userCredential.idToken;
         const email =userCredential.email;
-        localStorage.setItem('token', token);
-        localStorage.setItem('email',email)
+        const userId = email.replace(/[^a-zA-Z0-9\s]/g, "");
+
+        dispatch(login({ token, userId }));
+        // localStorage.setItem('token', token);
+        // localStorage.setItem('email',email)
 
         console.log('User signed up:', userCredential);
 
@@ -74,7 +83,7 @@ const Signup = () => {
        
         if (isLogin) {
           navigate('/login');
-          navigate('/expense')
+          // navigate('/expense')
         } else {
           
           setIsLogin(true);

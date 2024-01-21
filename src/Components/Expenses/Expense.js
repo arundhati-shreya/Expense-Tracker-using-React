@@ -158,11 +158,17 @@ const Expense = () => {
       }
 
       if (response.status === 200) {
-        setExpenses((prevExpenses) =>
-        prevExpenses.map((expense) =>
-          (expense._id === editingExpenseId) ? { _id: editingExpenseId, ...updatedData } : expense
-        ))
-      
+        
+        dispatch(
+          setExpenses(
+            expenses.map((expense) =>
+              expense._id === editingExpenseId
+                ? { _id: editingExpenseId, ...updatedData }
+                : expense
+            )
+          )
+        );
+        
 
         setEditingExpenseId(null);
         setAmount('');
